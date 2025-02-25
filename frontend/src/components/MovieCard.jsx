@@ -15,7 +15,7 @@ function MovieCard({movie}) {
             </div>
         </div>
         <h3>{movie.title}</h3>
-        <p>{movie.release_date}</p>
+        <p>{movie.release_date?.split("-")[0]}</p>
 
     </div>
 }
