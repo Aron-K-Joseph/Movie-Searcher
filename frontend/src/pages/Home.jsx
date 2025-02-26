@@ -27,12 +27,25 @@ function Home() {
         }
         loadPopularMovies()
     }, [])
-
-    const handleSearch = (e) => {
-        e.preventDefault(); //prevents deletion of the contents
+    //When user hits the enter button
+    const handleSearch = async (e) => {
+        e.preventDefault(); //prevents deletion of the contents upon search
         alert(searchQuery);
+        if(!searchQuery.trim())return; //if search query is emty, searchQuery.trim() returns false
+        if(loading)return; //we dont want to enter when loading
+        setLoading(true)
+        try{
+            const searchResults = await searchMovies(searchQuery);
+            setMovies(searchResults);
+            setError(null);
+        }catch (err) {
+            console.log(err);
+            setError("Failed to search movies...");
+        }finally {
+            setLoading(false);
+        }
     }
-
+    //layout of the home page
     return (
         <div className="home">
             <form onSubmit={handleSearch} className="search-form">
@@ -41,11 +54,11 @@ function Home() {
 
             </form>
 
-
+            {error && <div className="error-message">{error}</div>}
 
             {/* conditionally rendering the movies which start with the current state of the searchQuery */}
             {/* When state change occurs, entire home is rerendered  */}
-            {loading ? <div clasName="Loading">loading...</div> : <div className="movies-grid">
+            {loading ? <div className="Loading">loading...</div> : <div className="movies-grid">
                 {/*movies.map(<MovieCard movie = {movie} key = {movie.id}/>)*/}
                 {movies.map((movie) => movie.title.toLowerCase().startsWith(searchQuery.toLowerCase()) && (<MovieCard movie={movie} key={movie.id} />))}
             </div>}
