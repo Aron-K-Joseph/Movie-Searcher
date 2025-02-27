@@ -16,6 +16,7 @@ function Home() {
             try {
                 const popularMovies = await getPopularMovies()
                 setMovies(popularMovies)
+                console.log(movies);
             } catch (err) {
                 console.log(err);
                 setError("Failed to load movies");
@@ -56,10 +57,7 @@ function Home() {
 
             {error && <div className="error-message">{error}</div>}
 
-            {/* conditionally rendering the movies which start with the current state of the searchQuery */}
-            {/* When state change occurs, entire home is rerendered  */}
             {loading ? <div className="Loading">loading...</div> : <div className="movies-grid">
-                {/*movies.map(<MovieCard movie = {movie} key = {movie.id}/>)*/}
                 {movies.map((movie) => movie.title.toLowerCase().startsWith(searchQuery.toLowerCase()) && (<MovieCard movie={movie} key={movie.id} />))}
             </div>}
 
