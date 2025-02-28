@@ -46,11 +46,18 @@ function Home() {
             setLoading(false);
         }
     }
+    const updateMoviesBasedOnSearchQuery = async (query) =>{
+        setSearchQuery(query);
+        const moviesThatAreRelatedToQuery = await searchMovies(query);
+        setMovies(moviesThatAreRelatedToQuery);
+        console.log(query);
+        console.log(moviesThatAreRelatedToQuery);
+    }
     //layout of the home page
     return (
         <div className="home">
             <form onSubmit={handleSearch} className="search-form">
-                <input type="text" placeholder="Search for movies..." className="search-input" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                <input type="text" placeholder="Search for movies..." className="search-input" value={searchQuery} onChange={(e) => updateMoviesBasedOnSearchQuery(e.target.value)} />
                 <button type="submit" className="search-button">Search</button>
 
             </form>
@@ -58,7 +65,7 @@ function Home() {
             {error && <div className="error-message">{error}</div>}
 
             {loading ? <div className="Loading">loading...</div> : <div className="movies-grid">
-                {movies.map((movie) => movie.title.toLowerCase().startsWith(searchQuery.toLowerCase()) && (<MovieCard movie={movie} key={movie.id} />))}
+                {movies.map((movie) => (<MovieCard movie={movie} key={movie.id} />))}
             </div>}
 
         </div>
