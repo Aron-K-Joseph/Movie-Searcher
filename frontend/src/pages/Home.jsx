@@ -48,10 +48,20 @@ function Home() {
     }
     const updateMoviesBasedOnSearchQuery = async (query) =>{
         setSearchQuery(query);
-        const moviesThatAreRelatedToQuery = await searchMovies(query);
-        setMovies(moviesThatAreRelatedToQuery);
-        console.log(query);
-        console.log(moviesThatAreRelatedToQuery);
+        if(query.length === 0){
+            const popularMovies = await getPopularMovies()
+            setMovies(popularMovies)
+            console.log(query);
+            console.log(movies);
+        }
+        else{
+            const moviesThatAreRelatedToQuery = await searchMovies(query);
+            setMovies(moviesThatAreRelatedToQuery);
+            
+            console.log(query);
+            console.log(moviesThatAreRelatedToQuery);
+        }
+        
     }
     //layout of the home page
     return (
@@ -65,7 +75,7 @@ function Home() {
             {error && <div className="error-message">{error}</div>}
 
             {loading ? <div className="Loading">loading...</div> : <div className="movies-grid">
-                {movies.map((movie) => (<MovieCard movie={movie} key={movie.id} />))}
+                {movies.map((movie) =>(movie.poster_path !== null)&&(<MovieCard movie={movie} key={movie.id} />))}
             </div>}
 
         </div>
